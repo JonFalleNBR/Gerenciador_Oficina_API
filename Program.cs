@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using OficinaAPI.connection;
+using OficinaAPI.InfraEstrutura;
+using OficinaAPI.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+builder.Services.AddTransient<iClienteRepository, ClienteRepository>();
 
 builder.Services.AddDbContext<OficinaContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("OficinaDB")));

@@ -17,16 +17,16 @@ namespace OficinaAPI.Controllers
         //private readonly OficinaContext _context;
         private readonly iClienteRepository _iClienteRepository;
 
-        public ClienteController(iClienteRepository iClienteRepository)
+        public ClienteController(iClienteRepository clienteRepository)
         {
-            iClienteRepository = iClienteRepository ?? throw new ArgumentNullException(nameof(iClienteRepository));
+            _iClienteRepository = clienteRepository ?? throw new ArgumentNullException(nameof(clienteRepository));
         }
 
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task <IActionResult> GetAll()
         {
-            var clientes = _iClienteRepository.getAll();
+            var clientes = await _iClienteRepository.GetAllAsync();
             return Ok(clientes);
 
         }
@@ -36,7 +36,7 @@ namespace OficinaAPI.Controllers
         public async Task<ActionResult<Cliente>> GetClientes(int id)
         {
 
-            var cliente =  _iClienteRepository.getById(id);
+            var cliente = await _iClienteRepository.GetByIdAsync(id);
 
             if (cliente == null)
             {
@@ -48,27 +48,41 @@ namespace OficinaAPI.Controllers
 
         // Post: api/Cliente
         [HttpPost]
-        public IActionResult PostCliente(ClienteViewModel clienteView)
+        public async Task<IActionResult> PostCliente(ClienteViewModel clienteView)
         {
 
 
             var cliente = new Cliente(clienteView.Nome, clienteView.Telefone, clienteView.Email, clienteView.Endereco);
-            _iClienteRepository.add(cliente);
+      
 
-            return Ok();
+
+            await _iClienteRepository.AddAsync(cliente);
+
+            // var cliente = new Cliente(clienteView.Nome, clienteView.Telefone, clienteView.Email, clienteView.Endereco);
+            //await  _iClienteRepository.add(cliente);
+
+            return CreatedAtAction(nameof(GetClientes), new { id = cliente.ClienteId }, cliente);
         }
 
 
 
         // PUT: api/Cliente
         [HttpPut("{id}")]
-        public IActionResult PutCliente(int id, Cliente cliente)
+        public async Task<IActionResult> PutCliente(int id, ClienteViewModel clienteView)
         {
+
+            var cliente = await _iClienteRepository.GetByIdAsync(id);
             if (id != cliente.ClienteId)
             {
                 return BadRequest("[ERRO] => Cliente não Encontrado!!!");
             }
-            _iClienteRepository.update(cliente);      
+
+            cliente.Nome = clienteView.Nome;
+            cliente.Telefone = clienteView.Telefone;
+            cliente.Email = clienteView.Email;
+            cliente.Endereco = clienteView.Endereco;
+
+            await _iClienteRepository.UpdateAsync(cliente);
             return NoContent();
         }
 
@@ -76,21 +90,19 @@ namespace OficinaAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCliente(int id)
         {
-            var cliente = await _context.Clientes.FindAsync(id);
+
+
+            var cliente = await _iClienteRepository.GetByIdAsync(id);
             if (cliente == null)
             {
-                return NotFound();
+                return NotFound("[ERRO] => Cliente não Encontrado!!!");
             }
-            _context.Clientes.Remove(cliente);
-            await _context.SaveChangesAsync();
+            await _iClienteRepository.DeleteAsync(cliente);
             return NoContent();
-        }
 
-        // Método auxiliar para o método DeleteCliente em caso de erro
-        //private bool ClienteExists(int id)
-        //{
-        //    return _context.Clientes.Any(e => e.ClienteId == id);
-        //}
+
+
+        }
 
     }
 }

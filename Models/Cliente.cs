@@ -4,17 +4,25 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace OficinaAPI.Models
 {
 
-    [Table("Clientes")]
+    [Table("clientes")]
     public class Cliente
     {
 
         [Key]
+        [Column("clienteid")]
         public int ClienteId { get; set; }
-        string Nome { get; set; }
-        string Telefone { get; set; }
-        string Email { get; set; }
 
-        string Endereco { get; set; }
+        [Column("nome")]
+        public string Nome { get; set; }
+
+        [Column("telefone")]
+        public string Telefone { get; set; }
+
+        [Column("email")]
+        public string Email { get; set; }
+
+        [Column("endereco")]
+        public string Endereco { get; set; }
 
 
         public Cliente(string nome, string telefone, string email, string endereco)

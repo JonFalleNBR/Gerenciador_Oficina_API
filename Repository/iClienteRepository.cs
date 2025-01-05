@@ -7,15 +7,11 @@ namespace OficinaAPI.Repository
     public interface iClienteRepository
     {
 
-        void add(Cliente cliente);
-
-        void update(Cliente cliente);
-
-        void delete(Cliente cliente);
-
-        Cliente getById(int id);
-
-        List<Cliente> getAll();
+        Task<IEnumerable<Cliente>> GetAllAsync(); // Retorna uma lista de clientes
+        Task<Cliente> GetByIdAsync(int id);       // Retorna um cliente pelo ID
+        Task AddAsync(Cliente cliente);           // Adiciona um cliente
+        Task UpdateAsync(Cliente cliente);        // Atualiza um cliente
+        Task DeleteAsync(Cliente cliente);
 
     }
 }

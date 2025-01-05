@@ -11,12 +11,11 @@ namespace OficinaAPI.connection
         public DbSet<DescricaoServico> DescricaoServicos { get; set; }
 
 
-        //public OficinaContext(DbContextOptions<OficinaContext> options) : base(options)
-        //{
+        public OficinaContext(DbContextOptions<OficinaContext> options) : base(options)
+        {
 
 
 
-        //}
-
+        }
     }
 }

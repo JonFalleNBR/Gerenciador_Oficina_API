@@ -1,4 +1,5 @@
-﻿using OficinaAPI.connection;
+﻿using Microsoft.EntityFrameworkCore;
+using OficinaAPI.connection;
 using OficinaAPI.Models;
 using OficinaAPI.Repository;
 
@@ -9,38 +10,41 @@ namespace OficinaAPI.InfraEstrutura
 
         // Implementação dos métodos da interface iClienteRepository
 
-        private readonly OficinaContext _context = new OficinaContext();
+        private readonly OficinaContext _context;
 
-
-
-        public void add(Cliente cliente)
+        public ClienteRepository(OficinaContext context)
         {
-            _context.Clientes.Add(cliente);
-            _context.SaveChanges(); 
-        }
-        public List<Cliente> getAll()
-        {
-            return _context.Clientes.ToList();
-
+            _context = context;
         }
 
-        public Cliente getById(int id)
+        public async Task<IEnumerable<Cliente>> GetAllAsync()
         {
-           return _context.Clientes.Find(id);
+           return await _context.Clientes.ToListAsync();
         }
 
-        public void update(Cliente cliente)
+        public async Task<Cliente> GetByIdAsync(int id)
         {
-            _context.Clientes.Update(cliente);            
-            _context.SaveChanges();
+            return await _context.Clientes.FindAsync(id);
         }
 
-        public void delete(Cliente cliente)
+        public async Task AddAsync(Cliente cliente)
         {
+            await _context.Clientes.AddAsync(cliente);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(Cliente cliente)
+        {
+            _context.Clientes.Update(cliente);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(Cliente cliente)
+        {
+
             _context.Clientes.Remove(cliente);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
-
     }
 }
 

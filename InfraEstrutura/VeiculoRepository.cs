@@ -46,5 +46,11 @@ namespace OficinaAPI.InfraEstrutura
             _context.Veiculo.Update(veiculo);
             await _context.SaveChangesAsync();
         }
+
+
+        public async Task<Cliente> GetClienteByIdAsync(int id)
+        {
+            return _context.Clientes.FirstOrDefault(c => c.ClienteId == id);
+        }
     }
 }

@@ -22,6 +22,13 @@ namespace OficinaAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> PostVeiculo(VeiculoView veiculoView)
         {
+
+            var cliente = await iVeiculoRepository.GetClienteByIdAsync(veiculoView.ClienteId);
+            if(cliente == null)
+            {
+                return NotFound("[ERRO: Cliente Não Encontrado na base de Dados! ]");
+            }
+
             var veiculo = new Veiculo(veiculoView.Marca, veiculoView.Modelo, veiculoView.Ano, veiculoView.Placa, veiculoView.ClienteId);
 
             await iVeiculoRepository.AddAsync(veiculo);

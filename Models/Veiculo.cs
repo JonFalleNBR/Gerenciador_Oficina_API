@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace OficinaAPI.Models
 {
 
-    [Table("Veiculos")]
+    [Table("veiculos")]
     public class Veiculo
     {
         [Key]
@@ -49,6 +49,7 @@ namespace OficinaAPI.Models
             this.Modelo = modelo;
             this.Placa = placa;
             this.Ano = ano;
+            this.ClienteId = clienteId;
             
 
         }

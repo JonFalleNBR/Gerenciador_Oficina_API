@@ -11,6 +11,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 builder.Services.AddTransient<iClienteRepository, ClienteRepository>();
+builder.Services.AddTransient<iVeiculoRepository, VeiculoRepository>();
 
 builder.Services.AddDbContext<OficinaContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("OficinaDB")));

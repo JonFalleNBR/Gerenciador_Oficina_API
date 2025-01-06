@@ -7,7 +7,7 @@ namespace OficinaAPI.connection
     {
 
         public DbSet<Cliente> Clientes { get; set; }
-        public DbSet<Veiculo> Veiculos { get; set; }
+        public DbSet<Veiculo> Veiculo { get; set; }
         public DbSet<DescricaoServico> DescricaoServicos { get; set; }
 
 

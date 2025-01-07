@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OficinaAPI.connection;
-    using OficinaAPI.Models;
+using OficinaAPI.DTO;
+using OficinaAPI.Models;
+using OficinaAPI.NewFolder;
 using OficinaAPI.Repository;
 using OficinaAPI.View;
 
@@ -29,22 +31,23 @@ namespace OficinaAPI.Controllers
             var clientes = await _iClienteRepository.GetAllAsync();
 
             //logica abaixo para retornar os veiculos de cada cliente na consulta dos clientes
-            var clienteComVeiculo = clientes.Select(cliente => new
-           {
-               cliente.ClienteId,
-               cliente.Nome,
-               cliente.Telefone,
-               cliente.Email,
-               cliente.Endereco,
-               Veiculos = cliente.Veiculos.Select(veiculo => new
-               {
-                   veiculo.VeiculoId,
-                   veiculo.Modelo,
-                   veiculo.Placa,
-                   veiculo.Ano,
-                 
-               })
-           });
+            var clienteComVeiculo = clientes.Select(cliente => new ClientesDTO
+            {
+                ClienteId = cliente.ClienteId,
+                Nome = cliente.Nome,
+                Telefone = cliente.Telefone,
+                Email = cliente.Email,
+                Endereco = cliente.Endereco,
+                Veiculos = cliente.Veiculos.Select(veiculo => new VeiculoDTO
+                {
+                    VeiculoId = veiculo.VeiculoId,
+                    Marca = veiculo.Marca,
+                    Modelo = veiculo.Modelo,
+                    Placa = veiculo.Placa,
+                    Ano = veiculo.Ano
+
+                }).ToList()
+            });
             return Ok(clienteComVeiculo);
 
         }
@@ -61,19 +64,21 @@ namespace OficinaAPI.Controllers
                 return NotFound("[ERRO: Cliente não encontrado na base de dados!]");
             }
 
-            var clienteComVeiculo = new
+            var clienteComVeiculo = new ClientesDTO
             {
-                cliente.ClienteId,
-                cliente.Nome,
-                cliente.Telefone,
-                cliente.Email,
-                cliente.Endereco,
-                Veiculos = cliente.Veiculos.Select(veiculo => new
+                ClienteId = cliente.ClienteId,
+                Nome = cliente.Nome,
+                Telefone = cliente.Telefone,
+                Email = cliente.Email,
+                Endereco = cliente.Endereco,
+                Veiculos = cliente.Veiculos.Select(veiculo => new VeiculoDTO
                 {
-                    veiculo.VeiculoId,
-                    veiculo.Modelo,
-                    veiculo.Placa,
-                    veiculo.Ano,
+                    VeiculoId = veiculo.VeiculoId,
+                    Marca = veiculo.Marca,
+                    Modelo = veiculo.Modelo,
+                    Placa = veiculo.Placa,
+                    Ano = veiculo.Ano
+
                 }).ToList()
             };
 

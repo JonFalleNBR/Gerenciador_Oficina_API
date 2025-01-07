@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OficinaAPI.DTO;
 using OficinaAPI.Models;
 using OficinaAPI.Repository;
 using OficinaAPI.View;
@@ -34,7 +35,7 @@ namespace OficinaAPI.Controllers
             await iVeiculoRepository.AddAsync(veiculo);
 
             // logica para adicionar o veiculo ao cliente
-            var veiculoCliente = new
+            var veiculoCliente = new VeiculoDTO
             {
                 VeiculoId = veiculo.VeiculoId,
                 Marca = veiculo.Marca,
@@ -53,7 +54,21 @@ namespace OficinaAPI.Controllers
         public async Task<IActionResult> GetAll()
         {
             var veiculos = await iVeiculoRepository.GetAllAsync();
-            return Ok(veiculos);
+
+
+            var veiculoComCliente = veiculos.Select(veiculo => new VeiculoDTO
+            {
+                VeiculoId = veiculo.VeiculoId,
+                Marca = veiculo.Marca,
+                Modelo = veiculo.Modelo,
+                Ano = veiculo.Ano,
+                Placa = veiculo.Placa,
+                ClienteId = veiculo.ClienteId,
+                ClienteNome = veiculo.Cliente.Nome
+            }).ToList();
+
+
+            return Ok(veiculoComCliente);
         }
 
         [HttpGet("{id}")]
@@ -64,7 +79,18 @@ namespace OficinaAPI.Controllers
             {
                 return NotFound("[ERRO: Veiculo Não Encontrado na base de Dados! ]");
             }
-            return veiculo;
+
+            var veiculoComCliente = new VeiculoDTO
+            {
+                VeiculoId = veiculo.VeiculoId,
+                Marca = veiculo.Marca,
+                Modelo = veiculo.Modelo,
+                Ano = veiculo.Ano,
+                Placa = veiculo.Placa,
+                ClienteId = veiculo.ClienteId,
+                ClienteNome = veiculo.Cliente.Nome
+            };
+            return Ok(veiculoComCliente);
         }
 
 

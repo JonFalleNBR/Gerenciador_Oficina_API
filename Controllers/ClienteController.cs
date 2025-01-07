@@ -24,7 +24,7 @@ namespace OficinaAPI.Controllers
             _iClienteRepository = clienteRepository ?? throw new ArgumentNullException(nameof(clienteRepository));
         }
 
-
+        
         [HttpGet]
         public async Task <IActionResult> GetAll()
         {

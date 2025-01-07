@@ -13,7 +13,8 @@ namespace OficinaAPI.DTO
         public int Ano { get; set; }
 
 
-        
+        public int ClienteId { get; set; }  // Chave estrangeira
+        public string ClienteNome { get; set; }  // Propriedade de navegação
 
     }
 

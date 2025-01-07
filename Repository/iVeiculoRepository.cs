@@ -6,6 +6,8 @@ namespace OficinaAPI.Repository
     {
         public Task<IEnumerable<Veiculo>> GetAllAsync();
 
+        public Task<Veiculo> GetByAllAsync(int id);
+
         public Task <Cliente> GetClienteByIdAsync(int id);
 
         public Task<Veiculo> GetByIdAsync(int id);

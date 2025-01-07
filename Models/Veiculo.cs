@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace OficinaAPI.Models
 {
@@ -37,6 +38,8 @@ namespace OficinaAPI.Models
         [Column("clienteid")]
         public int ClienteId { get; set; }  // Chave estrangeira
 
+
+        [JsonIgnore]
         [ForeignKey("ClienteId")]
         public Cliente Cliente { get; set; }  // Propriedade de navegação
 

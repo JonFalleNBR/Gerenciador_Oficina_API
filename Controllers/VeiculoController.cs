@@ -32,7 +32,20 @@ namespace OficinaAPI.Controllers
             var veiculo = new Veiculo(veiculoView.Marca, veiculoView.Modelo, veiculoView.Ano, veiculoView.Placa, veiculoView.ClienteId);
 
             await iVeiculoRepository.AddAsync(veiculo);
-            return Ok(veiculo);
+
+            // logica para adicionar o veiculo ao cliente
+            var veiculoCliente = new
+            {
+                VeiculoId = veiculo.VeiculoId,
+                Marca = veiculo.Marca,
+                Modelo = veiculo.Modelo,
+                Ano = veiculo.Ano,
+                Placa = veiculo.Placa,
+                ClienteId = veiculo.ClienteId,
+                ClienteNome = cliente.Nome // Adicionando o nome do cliente ao veiculo para o usuario final
+            };
+
+            return Ok(veiculoCliente);
         }
 
 

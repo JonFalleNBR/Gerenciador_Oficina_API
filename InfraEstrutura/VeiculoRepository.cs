@@ -18,7 +18,7 @@ namespace OficinaAPI.InfraEstrutura
         public async Task AddAsync(Veiculo veiculo)
         {
             _context.Veiculo.Add(veiculo);
-            _context.SaveChangesAsync();
+           await _context.SaveChangesAsync();
 
         }
 
@@ -35,8 +35,9 @@ namespace OficinaAPI.InfraEstrutura
         }
 
         public async Task<Veiculo> GetByIdAsync(int id)
-        {
-            return await _context.Veiculo.FindAsync(id);
+        {     
+            return await _context.Veiculo.Include(v => v.Cliente) // Include para trazer o cliente do veiculo
+                .FirstOrDefaultAsync(v => v.VeiculoId == id);
 
         }
 
@@ -50,7 +51,7 @@ namespace OficinaAPI.InfraEstrutura
 
         public async Task<Cliente> GetClienteByIdAsync(int id)
         {
-            return _context.Clientes.FirstOrDefault(c => c.ClienteId == id);
+            return await _context.Clientes.FindAsync(id);
         }
     }
 }

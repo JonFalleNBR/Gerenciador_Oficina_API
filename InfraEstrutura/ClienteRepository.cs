@@ -19,12 +19,12 @@ namespace OficinaAPI.InfraEstrutura
 
         public async Task<IEnumerable<Cliente>> GetAllAsync()
         {
-           return await _context.Clientes.ToListAsync();
+           return await _context.Clientes.Include(c => c.Veiculos).ToListAsync(); // Retorna uma lista de clientes com seus veículos
         }
 
         public async Task<Cliente> GetByIdAsync(int id)
         {
-            return await _context.Clientes.FindAsync(id);
+            return await _context.Clientes.Include(c => c.Veiculos).FirstOrDefaultAsync(c => c.ClienteId == id);// Retorna um cliente pelo ID
         }
 
         public async Task AddAsync(Cliente cliente)

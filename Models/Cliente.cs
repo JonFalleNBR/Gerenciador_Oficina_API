@@ -35,7 +35,7 @@ namespace OficinaAPI.Models
 
 
 
-        public ICollection<Veiculo> Veiculos { get; set; }
+        public ICollection<Veiculo> Veiculos { get; set; } = new List<Veiculo>();
         public ICollection<DescricaoServico> DescricaoServicos { get; set; }
 
     }

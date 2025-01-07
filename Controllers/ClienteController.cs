@@ -27,7 +27,25 @@ namespace OficinaAPI.Controllers
         public async Task <IActionResult> GetAll()
         {
             var clientes = await _iClienteRepository.GetAllAsync();
-            return Ok(clientes);
+
+            //logica abaixo para retornar os veiculos de cada cliente na consulta dos clientes
+            var clienteComVeiculo = clientes.Select(cliente => new
+           {
+               cliente.ClienteId,
+               cliente.Nome,
+               cliente.Telefone,
+               cliente.Email,
+               cliente.Endereco,
+               Veiculos = cliente.Veiculos.Select(veiculo => new
+               {
+                   veiculo.VeiculoId,
+                   veiculo.Modelo,
+                   veiculo.Placa,
+                   veiculo.Ano,
+                 
+               })
+           });
+            return Ok(clienteComVeiculo);
 
         }
 
@@ -40,11 +58,28 @@ namespace OficinaAPI.Controllers
 
             if (cliente == null)
             {
-                return NotFound();
+                return NotFound("[ERRO: Cliente não encontrado na base de dados!]");
             }
 
-            return  cliente;
+            var clienteComVeiculo = new
+            {
+                cliente.ClienteId,
+                cliente.Nome,
+                cliente.Telefone,
+                cliente.Email,
+                cliente.Endereco,
+                Veiculos = cliente.Veiculos.Select(veiculo => new
+                {
+                    veiculo.VeiculoId,
+                    veiculo.Modelo,
+                    veiculo.Placa,
+                    veiculo.Ano,
+                }).ToList()
+            };
+
+            return Ok(clienteComVeiculo);
         }
+
 
         // Post: api/Cliente
         [HttpPost]

@@ -9,6 +9,10 @@
 
        public string Endereco { get; set; }
 
+        //public List<VeiculoResumeView> Veiculos { get; set; };
+
 
     }
+
+
 }

@@ -46,6 +46,7 @@ namespace OficinaAPI.Controllers
                     Placa = veiculo.Placa,
                     Ano = veiculo.Ano
 
+
                 }).ToList()
             });
             return Ok(clienteComVeiculo);

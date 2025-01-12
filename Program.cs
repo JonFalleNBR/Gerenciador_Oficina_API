@@ -12,6 +12,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddTransient<iClienteRepository, ClienteRepository>();
 builder.Services.AddTransient<iVeiculoRepository, VeiculoRepository>();
+builder.Services.AddTransient<iOrcamentoRepository, OrcamentoRepository>();
 
 builder.Services.AddDbContext<OficinaContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("OficinaDB")));

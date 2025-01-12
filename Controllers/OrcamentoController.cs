@@ -69,48 +69,56 @@ namespace OficinaAPI.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Orcamento orcamento)
+        public async Task<IActionResult> Create([FromBody] Orcamento orcamentoDTO)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-           if(orcamento.VeiculoId <= 0) // modificar para o isValid
+           if(orcamentoDTO.VeiculoId <= 0) // modificar para o isValid
             {
                 return BadRequest("[ERRO: Veiculo invalido!]");
 
             }
 
-           orcamento.Data = DateTime.UtcNow;
            
-            if(orcamento.Itens == null || orcamento.Itens.Count == 0)
+            if(orcamentoDTO.Itens == null || orcamentoDTO.Itens.Count == 0)
             {
                 return BadRequest("[ERRO: O Orçamento deve conter ao menos um item!]");
             }
 
-            var valorTotal = orcamento.Itens.Sum(i => i.Valor);
 
+            var orcamento = new Orcamento
+            {
+                VeiculoId = orcamentoDTO.VeiculoId,
+                Data = DateTime.UtcNow,
+                Itens = orcamentoDTO.Itens.Select(i => new ItemOrcamento
+                {
+                    Descricao = i.Descricao,
+                    Valor = i.Valor
+                }).ToList()
+            };
 
+            //salvando o orçamento no banco de Dados
             await _orcamentoRepository.AddAsync(orcamento);
 
-            var response = new
-            {
-                Id = orcamento.OrcamentoId,
-                Veiculo = new
-                {
-                    Modelo = orcamento.Veiculo.Modelo,
-                    Marca = orcamento.Veiculo.Marca
-                },
-                Cliente = orcamento.Veiculo.Cliente.Nome,
-                Descricao = string.Join(", ", orcamento.Itens.Select(i => i.Descricao)),
-                Valor = orcamento.Itens.Sum(i => i.Valor),
-                Data = orcamento.Data
 
+            var response = new OrcamentoDTO
+            {
+                OS = orcamento.OrcamentoId,
+                VeiculoNome = $"{orcamento.Veiculo.Marca} {orcamento.Veiculo.Modelo}",
+                ClienteNome = orcamento.Veiculo.Cliente.Nome,
+                Data = orcamento.Data,
+                ValorTotal = orcamento.Itens.Sum(i => i.Valor),
+                Itens = orcamento.Itens.Select(i => new ItemOrcamentoDTO
+                {
+                    Descricao = i.Descricao,
+                    Valor = i.Valor
+                }).ToList()
             };
 
             return CreatedAtAction(nameof(GetById), new { id = orcamento.OrcamentoId }, response);
-
         }
 
 

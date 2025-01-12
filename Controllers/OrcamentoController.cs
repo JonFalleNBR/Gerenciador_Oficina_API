@@ -69,7 +69,6 @@ namespace OficinaAPI.Controllers
 
 
         [HttpPost]
-
         public async Task<IActionResult> Create([FromBody] Orcamento orcamento)
         {
             if (!ModelState.IsValid)
@@ -77,9 +76,40 @@ namespace OficinaAPI.Controllers
                 return BadRequest(ModelState);
             }
 
+           if(orcamento.VeiculoId <= 0) // modificar para o isValid
+            {
+                return BadRequest("[ERRO: Veiculo invalido!]");
+
+            }
+
+           orcamento.Data = DateTime.UtcNow;
+           
+            if(orcamento.Itens == null || orcamento.Itens.Count == 0)
+            {
+                return BadRequest("[ERRO: O Orçamento deve conter ao menos um item!]");
+            }
+
+            var valorTotal = orcamento.Itens.Sum(i => i.Valor);
+
+
             await _orcamentoRepository.AddAsync(orcamento);
 
-            return CreatedAtAction(nameof(GetById), new { id = orcamento.OrcamentoId }, orcamento);
+            var response = new
+            {
+                Id = orcamento.OrcamentoId,
+                Veiculo = new
+                {
+                    Modelo = orcamento.Veiculo.Modelo,
+                    Marca = orcamento.Veiculo.Marca
+                },
+                Cliente = orcamento.Veiculo.Cliente.Nome,
+                Descricao = string.Join(", ", orcamento.Itens.Select(i => i.Descricao)),
+                Valor = orcamento.Itens.Sum(i => i.Valor),
+                Data = orcamento.Data
+
+            };
+
+            return CreatedAtAction(nameof(GetById), new { id = orcamento.OrcamentoId }, response);
 
         }
 

@@ -8,3 +8,5 @@
 -- A API foi desenvolvida utilizando o padrão de arquitetura CQRS (Command Query Responsibility Segregation).
 -- A API é a parte de back-end do projeto OficinaAPI, a parte de front-end do projeto pode ser encontrada no repositório OficinaApp.
 -- O front end será em Windows Forms e será desenvolvido em C#.
+
+Novo Commit 14-01

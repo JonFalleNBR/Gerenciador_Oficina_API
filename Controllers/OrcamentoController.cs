@@ -68,26 +68,25 @@ namespace OficinaAPI.Controllers
         }
 
 
+
+
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Orcamento orcamentoDTO)
+        public async Task<IActionResult> Create([FromBody] CreateOrcamentoDTO orcamentoDTO)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-           if(orcamentoDTO.VeiculoId <= 0) // modificar para o isValid
+            if (orcamentoDTO.VeiculoId <= 0)
             {
-                return BadRequest("[ERRO: Veiculo invalido!]");
-
+                return BadRequest("[ERRO: Veículo inválido!]");
             }
 
-           
-            if(orcamentoDTO.Itens == null || orcamentoDTO.Itens.Count == 0)
+            if (orcamentoDTO.Itens == null || orcamentoDTO.Itens.Count == 0)
             {
                 return BadRequest("[ERRO: O Orçamento deve conter ao menos um item!]");
             }
-
 
             var orcamento = new Orcamento
             {
@@ -100,9 +99,7 @@ namespace OficinaAPI.Controllers
                 }).ToList()
             };
 
-            //salvando o orçamento no banco de Dados
             await _orcamentoRepository.AddAsync(orcamento);
-
 
             var response = new OrcamentoDTO
             {
@@ -121,6 +118,17 @@ namespace OficinaAPI.Controllers
             return CreatedAtAction(nameof(GetById), new { id = orcamento.OrcamentoId }, response);
         }
 
-
+        /* TODO
+         * Ajustar a configuração da Entidade 
+         * 
+         * Certifique-se de que as entidades estão corretamente mapeadas e 
+         * que as propriedades de navegação estão configuradas corretamente.
+         * 
+         * Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. 
+         * See the inner exception for details. --->
+         * Npgsql.PostgresException (0x80004005): 
+         * 42703: column "ClienteId" of relation "orcamentos" does not exist
+         */        
+        
     }
 }

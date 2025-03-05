@@ -21,6 +21,7 @@ namespace OficinaAPI.Models
         public string Descricao { get; set; }
 
         [Required]
+        [Range(0, double.MaxValue, ErrorMessage = "O valor deve ser positivo.")]
         [Column("valor")]
         public decimal Valor { get; set; }
 

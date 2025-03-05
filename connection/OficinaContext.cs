@@ -32,7 +32,23 @@ namespace OficinaAPI.connection
                 .HasOne(i => i.Orcamento)
                 .WithMany(o => o.Itens)
                 .HasForeignKey(i => i.OrcamentoId);
+
+
+            modelBuilder.Entity<Orcamento>()
+    .HasOne(o => o.Cliente)
+    .WithMany()
+    .HasForeignKey(o => o.ClienteId);
+
+            // Relação entre Veiculo e Cliente
+            //modelBuilder.Entity<Veiculo>()
+            //    .HasOne(v => v.Cliente)
+            //    .WithMany()
+            //    .HasForeignKey(v => v.ClienteId);
+
+
         }
+
+
 
     }
 }

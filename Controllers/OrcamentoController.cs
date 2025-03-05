@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OficinaAPI.DTO;
+using OficinaAPI.InfraEstrutura;
 using OficinaAPI.Models;
 using OficinaAPI.Repository;
 
@@ -13,10 +14,14 @@ namespace OficinaAPI.Controllers
     public class OrcamentoController : ControllerBase
     {
         private readonly iOrcamentoRepository _orcamentoRepository;
+        private readonly iVeiculoRepository _veiculoRepository;
+        private readonly iClienteRepository _clienteRepository;
 
-        public OrcamentoController(iOrcamentoRepository orcamentoRepository)
+        public OrcamentoController(iOrcamentoRepository orcamentoRepository, iVeiculoRepository veiculoRepository, iClienteRepository clienteRepository)
         {
             _orcamentoRepository = orcamentoRepository;
+            _veiculoRepository = veiculoRepository;
+            _clienteRepository = clienteRepository;
         }
 
         [HttpGet]
@@ -87,6 +92,22 @@ namespace OficinaAPI.Controllers
             {
                 return BadRequest("[ERRO: O Orçamento deve conter ao menos um item!]");
             }
+
+            // nova inserção
+            var veiculo = await _veiculoRepository.GetByIdAsync(orcamentoDTO.VeiculoId);
+
+            if(veiculo == null)
+            {
+                return NotFound("[ERRO: Veículo não encontrado!]");
+            }
+
+
+            var cliente = await _clienteRepository.GetByIdAsync(orcamentoDTO.ClienteId);
+            if (cliente == null)
+            {
+                return NotFound("[ERRO: Cliente não encontrado!]");
+            }
+            // fim do novo tratamento
 
             var orcamento = new Orcamento
             {

@@ -21,7 +21,10 @@ namespace OficinaAPI.Models
         public DateTime Data { get; set; }
 
 
-        public List<ItemOrcamento> Itens { get; set; }
+        [Column("valor")]
+        public decimal ValorTotal { get; set; }
+
+        public List<ItemOrcamento> Itens { get; set; } = new List<ItemOrcamento>();
 
         [NotMapped] // Ignora a propriedade na criação do banco de dados
         public decimal Valor
